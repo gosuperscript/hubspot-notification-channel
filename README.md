@@ -129,10 +129,6 @@ $ composer test
 
 If you discover any security related issues, please email kani.robinson@digitalrisks.co.uk instead of using the issue tracker.
 
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
 ## Credits
 
 - [Kani Robinson](https://github.com/kanirobinson)
