@@ -1,0 +1,1 @@
+# Laravel Hubspot Notification Channel
