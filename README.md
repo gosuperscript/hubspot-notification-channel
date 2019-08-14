@@ -39,17 +39,46 @@ Add your Hubspot key to your `config/services.php`:
 Now you can use the channel in your `via()` method inside the notification:
 
 ``` php
+<?php
+
+namespace App\Notifications;
+
 use DigitalRisks\Notifications\Messages\HubspotMessage;
+use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
 class SomethingHappened extends Notification
 {
+    use Queueable;
+
+    /**
+     * Create a new notification instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
     public function via($notifiable)
     {
         return ['hubspot'];
     }
 
-    public function toHubspot($notifiable)
+    /**
+     * Get the hubspot representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \DigitalRisks\Notifications\Messages\HubspotMessage
+     */
+    public function toMail($notifiable)
     {
         return (new HubspotMessage)
             ->templateId(config('services.hubspot.template_id'))
@@ -58,6 +87,33 @@ class SomethingHappened extends Notification
     }
 }
 ```
+
+## Setting up the to field.
+``` php
+<?php
+
+namespace App;
+
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+    
+    /**
+     * Route notifications for the Hubspot channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForHubspot($notification)
+    {
+        return $this->email;
+    }
+}
+```
+
 
 ## Changelog
 
