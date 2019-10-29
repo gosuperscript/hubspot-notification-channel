@@ -42,7 +42,7 @@ class HubspotChannel
 
         return $this->hubspot->singleEmail()->send(
             $message->templateId,
-            ['to' => $to],
+            array_merge(['to' => $to], $message->messageProperties),
             $message->contactProperties,
             $message->customProperties,
         );
