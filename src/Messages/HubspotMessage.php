@@ -26,6 +26,13 @@ class HubspotMessage
     public $customProperties = [];
 
     /**
+     * The message properties for Hubspot.
+     *
+     * @var array
+     */
+    public $messageProperties = [];
+
+    /**
      * Set the template id of the hubspot message.
      *
      * @param  string  $templateId
@@ -60,6 +67,19 @@ class HubspotMessage
     public function customProperties($customProperties)
     {
         $this->customProperties = $customProperties;
+
+        return $this;
+    }
+
+    /**
+     * Set the message properties of the hubspot message.
+     *
+     * @param array $messageProperties
+     * @return $this
+     */
+    public function messageProperties($messageProperties)
+    {
+        $this->messageProperties = $messageProperties;
 
         return $this;
     }
