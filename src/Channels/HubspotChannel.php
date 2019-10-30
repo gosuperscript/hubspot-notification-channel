@@ -44,7 +44,7 @@ class HubspotChannel
             $message->templateId,
             array_merge(['to' => $to], $message->messageProperties),
             $message->contactProperties,
-            $message->customProperties,
+            $message->customProperties
         );
     }
 }
