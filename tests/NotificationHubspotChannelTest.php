@@ -9,21 +9,36 @@ use Illuminate\Notifications\Notification;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use SevenShores\Hubspot\Factory;
+use SevenShores\Hubspot\Resources\SingleEmail;
 
 class NotificationHubspotChannelTest extends TestCase
 {
     public function test_email_is_sent_via_hubspot()
     {
-        $notification = new HubspotChannelTestNotification;
-        $notifiable = new HubspotChannelTestNotifiable;
-        $channel = new HubspotChannel(
-            $hubspot = Mockery::mock(Factory::class),
-            'kani.robinson@digitalrisks.co.uk',
-        );
+        // https://stackoverflow.com/questions/21358268/mockery-call-has-a-different-signature
+        if (defined('E_STRICT')) error_reporting('E_ALL ^ E_STRICT');
 
-        $hubspot->shouldReceive('message->send');
+        // Arrange.
+        $hubspot = Mockery::mock(Factory::class);
+        $singleEmail = Mockery::mock(SingleEmail::class);
+        $channel = new HubspotChannel($hubspot);
 
-        $channel->send($notifiable, $notification);
+        // Assert.
+        $hubspot->shouldReceive('singleEmail')->andReturn($singleEmail);
+        $singleEmail->shouldReceive('send')->with(
+            '12134249933',
+            ['to' => 'kani.robinson@digitalrisks.co.uk'],
+            [
+                ['name' => 'limit', 'value' => '100']
+            ],
+            [
+                ['name' => 'name', 'value' => 'Kani Robinson']
+            ]
+        )->andReturn(true);
+
+        // Act.
+        $result = $channel->send(new TestNotifiable, new TestNotification);
+        $this->assertTrue($result);
     }
 
     public function tearDown()
@@ -32,19 +47,27 @@ class NotificationHubspotChannelTest extends TestCase
     }
 }
 
-class HubspotChannelTestNotifiable
+class TestNotifiable
 {
     use Notifiable;
 
-    public $email = 'kani.robinson@digitalrisks.co.uk';
+    public function routeNotificationForHubspot($notification) {
+        return 'kani.robinson@digitalrisks.co.uk';
+    }
 }
 
-class HubspotChannelTestNotification extends Notification
+class TestNotification extends Notification
 {
     public function toHubspot($notifiable)
     {
         return (new HubspotMessage)
             ->templateId('12134249933')
+            ->contactProperties([
+                [
+                    'name' => 'limit',
+                    'value' => '100',
+                ],
+            ])
             ->customProperties([
                 [
                     'name' => 'name',
