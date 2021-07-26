@@ -16,7 +16,7 @@ class NotificationHubspotChannelTest extends TestCase
     public function test_email_is_sent_via_hubspot()
     {
         // https://stackoverflow.com/questions/21358268/mockery-call-has-a-different-signature
-        if (defined('E_STRICT')) error_reporting('E_ALL ^ E_STRICT');
+        if (defined('E_STRICT')) error_reporting(E_ALL ^ E_STRICT);
 
         // Arrange.
         $hubspot = Mockery::mock(Factory::class);
@@ -41,7 +41,7 @@ class NotificationHubspotChannelTest extends TestCase
         $this->assertTrue($result);
     }
 
-    public function tearDown()
+    public function tearDown() : void
     {
         Mockery::close();
     }
