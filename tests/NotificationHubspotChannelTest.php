@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use SevenShores\Hubspot\Factory;
-use SevenShores\Hubspot\Resources\SingleEmail;
+use SevenShores\Hubspot\Resources\TransactionalEmail;
 
 class NotificationHubspotChannelTest extends TestCase
 {
@@ -20,11 +20,11 @@ class NotificationHubspotChannelTest extends TestCase
 
         // Arrange.
         $hubspot = Mockery::mock(Factory::class);
-        $singleEmail = Mockery::mock(SingleEmail::class);
+        $singleEmail = Mockery::mock(TransactionalEmail::class);
         $channel = new HubspotChannel($hubspot);
 
         // Assert.
-        $hubspot->shouldReceive('singleEmail')->andReturn($singleEmail);
+        $hubspot->shouldReceive('transactionalEmail')->andReturn($singleEmail);
         $singleEmail->shouldReceive('send')->with(
             '12134249933',
             ['to' => 'kani.robinson@digitalrisks.co.uk'],

@@ -40,7 +40,7 @@ class HubspotChannel
 
         $message = $notification->toHubspot($notifiable);
 
-        return $this->hubspot->singleEmail()->send(
+        return $this->hubspot->transactionalEmail()->send(
             $message->templateId,
             array_merge(['to' => $to], $message->messageProperties),
             $message->contactProperties,
