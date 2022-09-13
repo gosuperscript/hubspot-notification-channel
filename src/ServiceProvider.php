@@ -20,7 +20,8 @@ class ServiceProvider extends BaseServiceProvider
             $service->extend('hubspot', function ($app) {
                 return new Channels\HubspotChannel(
                     new Factory([
-                        'key' => $this->app['config']['services.hubspot.key'],
+                        'key' => $this->app['config']['services.hubspot.app_access_token'],
+                        'oauth2' => true,
                     ])
                 );
             });
