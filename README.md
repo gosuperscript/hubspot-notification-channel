@@ -28,7 +28,7 @@ Add your Hubspot key to your `config/services.php`:
 // config/services.php
 ...
 'hubspot' => [
-    'key' => env('HUBSPOT_KEY', null),
+    'app_access_token' => env('HUBSPOT_APP_ACCESS_TOKEN', null),
     'template_id' => env('TEMPLATE_NAME_ID', null)
 ],
 ...
